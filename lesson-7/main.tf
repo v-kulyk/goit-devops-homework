@@ -1,0 +1,56 @@
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+# S3 Backend and DynamoDB module
+module "s3_backend" {
+  source      = "./modules/s3-backend"
+  bucket_name = var.bucket_name
+  table_name  = var.dynamodb_table_name
+  tags        = var.common_tags
+}
+
+# VPC module
+module "vpc" {
+  source             = "./modules/vpc"
+  vpc_cidr_block     = var.vpc_cidr_block
+  public_subnets     = var.public_subnets
+  private_subnets    = var.private_subnets
+  availability_zones = var.availability_zones
+  vpc_name           = var.vpc_name
+
+  tags = var.common_tags
+}
+
+# ECR module
+module "ecr" {
+  source       = "./modules/ecr"
+  ecr_name     = var.ecr_name
+  scan_on_push = var.ecr_scan_on_push
+
+  tags = var.common_tags
+}
+
+# EKS module
+module "eks" {
+  source           = "./modules/eks"
+  cluster_name     = "goit-homework-eks-cluster"
+  cluster_version  = "1.28"
+  vpc_id           = module.vpc.vpc_id
+  subnet_ids       = module.vpc.public_subnet_ids
+  node_group_name  = "goit-homework-node-group"
+  instance_types   = ["t2.micro"]
+  desired_capacity = 1
+  max_capacity     = 2
+  min_capacity     = 1
+}

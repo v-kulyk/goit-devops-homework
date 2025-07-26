@@ -1,0 +1,12 @@
+apiVersion: v2
+name: django-app
+description: A Helm chart for Django application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+# Deployment — з образом Django з ECR та підключенням ConfigMap (через envFrom).
+# Service — типу LoadBalancer для зовнішнього доступу.
+# HPA (Horizontal Pod Autoscaler) — масштабування подів від 2 до 6 при навантаженні > 70%.
+# ConfigMap — для змінних середовища (перенесених із теми 4).
+# values.yaml — з параметрами образу, сервісу, конфігурації та autoscaler.
