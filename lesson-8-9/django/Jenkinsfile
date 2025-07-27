@@ -1,0 +1,83 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: jenkins-kaniko
+spec:
+  serviceAccountName: jenkins-sa
+  containers:
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:v1.16.0-debug
+      imagePullPolicy: Always
+      command:
+        - sleep
+      args:
+        - 99d
+    - name: git
+      image: alpine/git
+      command:
+        - sleep
+      args:
+        - 99d
+"""
+    }
+  }
+
+  environment {
+    ECR_REGISTRY = "02125625332.dkr.ecr.eu-north-1.amazonaws.com"
+    IMAGE_NAME   = "goit-devops-homework"
+    IMAGE_TAG    = "v1.0.${BUILD_NUMBER}"
+
+    COMMIT_EMAIL = "jenkins@localhost"
+    COMMIT_NAME  = "jenkins"
+  }
+
+  stages {
+    stage('Build & Push Docker Image') {
+      steps {
+        container('kaniko') {
+          sh '''
+            cd django
+            /kaniko/executor \\
+              --context `pwd` \\
+              --dockerfile `pwd`/Dockerfile \\
+              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
+              --cache=true \\
+              --insecure \\
+              --skip-tls-verify
+          '''
+        }
+      }
+    }
+
+    stage('Update Chart Tag in Git') {
+      steps {
+        container('git') {
+          withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
+            sh '''
+              export GITHUB_TOKEN=$GIT_PAT
+              git clone https://$GIT_USERNAME:$GIT_PAT@github.com/v-kulyk/goit-devops-homework.git
+              cd goit-devops-tasks
+
+              sed -i "s/tag: .*/tag: $IMAGE_TAG/" lesson-8-9/charts/django-app/values.yaml
+
+              git config user.email "$COMMIT_EMAIL"
+              git config user.name "$COMMIT_NAME"
+              git remote set-url origin https://${GIT_PAT}@github.com/v-kulyk/goit-devops-homework.git
+
+              git add lesson-8-9/charts/django-app/values.yaml
+              git commit -m "Update image tag to $IMAGE_TAG"
+
+              export GIT_ASKPASS=/bin/echo
+              git push -f origin main
+            '''
+          }
+        }
+      }
+    }
+  }
+}
