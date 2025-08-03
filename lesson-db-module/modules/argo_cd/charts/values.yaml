@@ -1,0 +1,28 @@
+applications:
+  - name: django-app
+    namespace: default
+    project: default
+    source:
+      repoURL: https://github.com/v-kulyk/goit-devops-homework.git
+      path: lesson-8-9/charts/django-app
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: default
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+repositories:
+  - name: django-app-repo
+    url: https://github.com/v-kulyk/goit-devops-homework.git
+    username: "${github_username}"
+    password: "${github_token}"
+
+repoConfig:
+  insecure: "true"
+  enableLfs: "true"
