@@ -28,7 +28,8 @@ spec:
   }
 
   environment {
-    ECR_REGISTRY = "02125625332.dkr.ecr.eu-north-1.amazonaws.com"
+    AWS_ACCOUNT_ID = sh(script: 'aws sts get-caller-identity --query Account --output text', returnStdout: true).trim()
+    ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.eu-north-1.amazonaws.com"
     IMAGE_NAME   = "goit-devops-homework"
     IMAGE_TAG    = "v1.0.${BUILD_NUMBER}"
 
@@ -61,16 +62,20 @@ spec:
             sh '''
               export GITHUB_TOKEN=$GIT_PAT
               git clone https://$GIT_USERNAME:$GIT_PAT@github.com/v-kulyk/goit-devops-homework.git
-              cd goit-devops-tasks
+              cd goit-devops-homework/final-project
 
-              sed -i "s/tag: .*/tag: $IMAGE_TAG/" lesson-8-9/charts/django-app/values.yaml
+              # Update image tag
+              sed -i "s/tag: .*/tag: $IMAGE_TAG/" charts/django-app/values.yaml
+              
+              # Update AWS account ID placeholder
+              sed -i "s/__AWS_ACCOUNT_ID__/$AWS_ACCOUNT_ID/g" charts/django-app/values.yaml
 
               git config user.email "$COMMIT_EMAIL"
               git config user.name "$COMMIT_NAME"
               git remote set-url origin https://${GIT_PAT}@github.com/v-kulyk/goit-devops-homework.git
 
-              git add lesson-8-9/charts/django-app/values.yaml
-              git commit -m "Update image tag to $IMAGE_TAG"
+              git add charts/django-app/values.yaml
+              git commit -m "Update image tag to $IMAGE_TAG and ECR registry"
 
               export GIT_ASKPASS=/bin/echo
               git push -f origin main

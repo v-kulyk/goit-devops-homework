@@ -48,3 +48,8 @@ output "oidc_provider_url" {
   description = "OIDC provider URL for IRSA"
   value       = aws_iam_openid_connect_provider.eks.url
 }
+
+output "node_role_arn" {
+  description = "IAM role ARN for EKS Worker Nodes"
+  value       = aws_iam_role.eks_node_role.arn
+}

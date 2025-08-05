@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 702125625332.dkr.ecr.eu-north-1.amazonaws.com/goit-devops-homework
+  repository: __AWS_ACCOUNT_ID__.dkr.ecr.eu-north-1.amazonaws.com/goit-devops-homework
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -20,7 +20,14 @@ autoscaling:
 django:
   config:
     POSTGRES_HOST: db
-    POSTGRES_POR: 5432
+    POSTGRES_PORT: 5432
     POSTGRES_DB: django
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
+
+postgresql:
+  host: "djangoapp-db.xxx.eu-north-1.rds.amazonaws.com"  # Will be populated after RDS creation
+  port: "5432"
+  database: "djangoapp"
+  username: "postgres"
+  password: "your-secure-password"  # Should match terraform variable

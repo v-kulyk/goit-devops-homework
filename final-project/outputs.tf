@@ -1,6 +1,6 @@
 output "s3_bucket_name" {
   description = "S3 bucket with Terraform state"
-  value       = module.s3_backend.s3_bucket_name
+  value       = module.s3_backend.bucket_name
 }
 
 output "dynamodb_table_name" {
