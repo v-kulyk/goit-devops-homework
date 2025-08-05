@@ -2,7 +2,7 @@
 # AWS Configuration
 # ===================================
 aws_region = "eu-north-1"
-bucket_name = "your-unique-bucket-name-here"
+bucket_name = "vlad-goit-terraform-1754419201"
 dynamodb_table_name = "terraform-locks"
 
 # ===================================
@@ -26,14 +26,14 @@ ecr_scan_on_push = true
 common_tags = {
   Environment = "final-project"
   Project     = "goit-devops-homework"
-  Owner       = "your-name"
+  Owner       = "vlad"
 }
 
 # ===================================
 # GitHub Configuration
 # ===================================
-github_username = "your-github-username"
-github_token    = "your-github-token"
+github_username = "v-kulyk"
+github_token    = "ghp_xxxxxxxxxxxxxxxxxxxx"
 
 # ===================================
 # Database Configuration
@@ -42,7 +42,7 @@ postgres_host = "localhost"
 postgres_port = "5432"
 postgres_db = "djangoapp"
 postgres_user = "postgres"
-postgres_password = "your-secure-password"
+postgres_password = "SecurePassword123!"
 
 # ===================================
 # RDS Module Configuration

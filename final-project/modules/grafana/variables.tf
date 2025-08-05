@@ -44,7 +44,7 @@ variable "persistence_size" {
 variable "storage_class_name" {
   description = "Storage class name for persistent volume"
   type        = string
-  default     = "gp2"
+  default     = "gp3"
 }
 
 variable "prometheus_url" {
