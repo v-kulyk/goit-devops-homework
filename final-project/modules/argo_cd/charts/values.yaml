@@ -4,7 +4,7 @@ applications:
     project: default
     source:
       repoURL: https://github.com/v-kulyk/goit-devops-homework.git
-      path: lesson-8-9/charts/django-app
+      path: final-project/charts/django-app
       targetRevision: main
       helm:
         valueFiles:

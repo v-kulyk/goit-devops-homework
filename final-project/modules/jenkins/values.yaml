@@ -70,7 +70,7 @@ controller:
                       pipelineJob("goit-django-docker") {
                         definition {
                           cpsScm {
-                            scriptPath("lesson-8-9/django/Jenkinsfile")
+                            scriptPath("final-project/django/Jenkinsfile")
                             scm {
                               git {
                                 remote {

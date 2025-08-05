@@ -7,7 +7,7 @@ variable "release_name" {
 variable "chart_version" {
   description = "Version of the kube-prometheus-stack Helm chart"
   type        = string
-  default     = "56.0.0"
+  default     = "56.21.0"
 }
 
 variable "namespace" {

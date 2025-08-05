@@ -13,7 +13,7 @@ persistence:
   enabled: true
   type: pvc
   size: 2Gi
-  storageClassName: gp2
+  storageClassName: gp3
   accessModes:
     - ReadWriteOnce
 
