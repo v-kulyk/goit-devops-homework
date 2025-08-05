@@ -1,0 +1,87 @@
+# ===================================
+# AWS Configuration
+# ===================================
+aws_region = "eu-north-1"
+bucket_name = "your-unique-bucket-name-here"
+dynamodb_table_name = "terraform-locks"
+
+# ===================================
+# Network Configuration
+# ===================================
+vpc_cidr_block = "10.0.0.0/16"
+public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+private_subnets = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+availability_zones = ["eu-north-1a", "eu-north-1b", "eu-north-1c"]
+vpc_name = "goit-homework-vpc"
+
+# ===================================
+# ECR Configuration
+# ===================================
+ecr_name = "goit-devops-homework"
+ecr_scan_on_push = true
+
+# ===================================
+# Common Tags
+# ===================================
+common_tags = {
+  Environment = "final-project"
+  Project     = "goit-devops-homework"
+  Owner       = "your-name"
+}
+
+# ===================================
+# GitHub Configuration
+# ===================================
+github_username = "your-github-username"
+github_token    = "your-github-token"
+
+# ===================================
+# Database Configuration
+# ===================================
+postgres_host = "localhost"
+postgres_port = "5432"
+postgres_db = "djangoapp"
+postgres_user = "postgres"
+postgres_password = "your-secure-password"
+
+# ===================================
+# RDS Module Configuration
+# ===================================
+use_aurora = false
+db_instance_class = "db.t3.medium"
+db_allocated_storage = 20
+db_engine = "postgres"
+db_engine_version = "17.2"
+db_multi_az = false
+db_publicly_accessible = true
+db_backup_retention_period = 7
+
+# ===================================
+# Aurora Configuration (if use_aurora = true)
+# ===================================
+aurora_instance_count = 2
+aurora_engine = "aurora-postgresql"
+aurora_engine_version = "15.3"
+
+# ===================================
+# Environment Configuration
+# ===================================
+environment = "dev"
+project_name = "djangoapp"
+
+# ===================================
+# Database Parameters
+# ===================================
+postgres_parameters = {
+  max_connections            = "200"
+  log_min_duration_statement = "500"
+  work_mem                   = "4096"
+  shared_preload_libraries   = "pg_stat_statements"
+}
+
+# ===================================
+# Additional Database Passwords (Optional)
+# ===================================
+# mysql_password = "your-mysql-password"
+# prod_db_password = "your-prod-password"
+# aurora_mysql_password = "your-aurora-mysql-password"

@@ -1,0 +1,26 @@
+replicaCount: 1
+
+image:
+  repository: 702125625332.dkr.ecr.eu-north-1.amazonaws.com/goit-devops-homework
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+django:
+  config:
+    POSTGRES_HOST: db
+    POSTGRES_POR: 5432
+    POSTGRES_DB: django
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres

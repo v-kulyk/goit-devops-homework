@@ -1,0 +1,157 @@
+# Grafana configuration
+adminUser: admin
+adminPassword: admin123
+
+# Service configuration
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+# Persistence configuration
+persistence:
+  enabled: true
+  type: pvc
+  size: 2Gi
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteOnce
+
+# Data sources configuration
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server:80
+      access: proxy
+      isDefault: true
+      editable: true
+
+# Dashboard providers configuration
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+    - name: 'kubernetes'
+      orgId: 1
+      folder: 'Kubernetes'
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/kubernetes
+
+# Default dashboards
+dashboards:
+  default:
+    # Kubernetes cluster monitoring dashboard
+    kubernetes-cluster-monitoring:
+      gnetId: 7249
+      revision: 1
+      datasource: Prometheus
+    
+    # Node Exporter dashboard
+    node-exporter:
+      gnetId: 1860
+      revision: 29
+      datasource: Prometheus
+    
+    # Kubernetes pod monitoring
+    kubernetes-pods:
+      gnetId: 6417
+      revision: 1
+      datasource: Prometheus
+
+  kubernetes:
+    # Kubernetes deployment dashboard
+    kubernetes-deployment:
+      gnetId: 8588
+      revision: 1
+      datasource: Prometheus
+    
+    # Kubernetes StatefulSet dashboard
+    kubernetes-statefulset:
+      gnetId: 8739
+      revision: 1
+      datasource: Prometheus
+    
+    # Kubernetes persistent volumes
+    kubernetes-persistent-volumes:
+      gnetId: 13646
+      revision: 2
+      datasource: Prometheus
+
+# Grafana configuration
+grafana.ini:
+  server:
+    root_url: "%(protocol)s://%(domain)s:%(http_port)s/"
+  security:
+    admin_user: admin
+  analytics:
+    reporting_enabled: false
+    check_for_updates: false
+  log:
+    mode: console
+    level: info
+  paths:
+    data: /var/lib/grafana/
+    logs: /var/log/grafana
+    plugins: /var/lib/grafana/plugins
+    provisioning: /etc/grafana/provisioning
+
+# Resource limits and requests
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Pod security context
+securityContext:
+  runAsUser: 472
+  runAsGroup: 472
+  fsGroup: 472
+
+# Container security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 472
+  capabilities:
+    drop:
+    - ALL
+
+# Enable RBAC
+rbac:
+  create: true
+  pspEnabled: false
+
+# Service account
+serviceAccount:
+  create: true
+  autoMount: true
+
+# Image configuration
+image:
+  repository: grafana/grafana
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Environment variables
+env:
+  GF_EXPLORE_ENABLED: true
+  GF_ALERTING_ENABLED: true
+  GF_UNIFIED_ALERTING_ENABLED: true
